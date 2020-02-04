@@ -3,7 +3,6 @@ class Dumper
   # and implements methods that convert the response to meaningful data.
   class Fints < Dumper
     require 'ruby_fints'
-    require 'digest/md5'
 
     def initialize(params = {})
       @ynab_id  = params.fetch('ynab_id')
@@ -65,7 +64,7 @@ class Dumper
     end
 
     def import_id(transaction)
-      Digest::MD5.hexdigest(transaction.source)
+      Digest::SHA2.hexdigest("#{transaction.date.to_time.to_i}#{transaction.amount}#{transaction.name}").slice(0, 36)
     end
 
     # Patches
